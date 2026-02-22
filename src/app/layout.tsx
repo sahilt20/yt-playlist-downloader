@@ -15,8 +15,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark scroll-smooth">
-      <body className={`${inter.variable} font-sans min-h-screen bg-background text-foreground antialiased selection:bg-brand-500/30 overflow-x-hidden relative`}>
+    <html lang="en" className="dark scroll-smooth" suppressHydrationWarning>
+      <body className={`${inter.variable} font-sans min-h-screen bg-background text-foreground antialiased selection:bg-brand-500/30 overflow-x-hidden relative`} suppressHydrationWarning>
         {/* Background ambient glow */}
         <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
           <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-brand-600/10 blur-[120px]" />

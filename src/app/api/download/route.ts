@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
-import { exec } from 'youtube-dl-exec';
+import { create } from 'youtube-dl-exec';
 import os from 'os';
 import path from 'path';
+
+const ytDlpPath = path.join(process.cwd(), 'node_modules', 'youtube-dl-exec', 'bin', 'yt-dlp');
+const ytdl = create(ytDlpPath);
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -22,7 +25,6 @@ export async function GET(request: Request) {
             const args: any = {
                 output: path.join(downloadsDir, '%(playlist_title)s', '%(title)s.%(ext)s'),
                 noWarnings: true,
-                noCallHome: true,
             };
 
             if (format === 'mp3') {
@@ -35,7 +37,7 @@ export async function GET(request: Request) {
                 args.mergeOutputFormat = 'mp4';
             }
 
-            const subprocess = exec(url, args);
+            const subprocess = ytdl.exec(url, args);
 
             subprocess.stdout?.on('data', (data) => {
                 const text = data.toString();

@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
-import ytdl from 'youtube-dl-exec';
+import { create } from 'youtube-dl-exec';
+import path from 'path';
+
+const ytDlpPath = path.join(process.cwd(), 'node_modules', 'youtube-dl-exec', 'bin', 'yt-dlp');
+const ytdl = create(ytDlpPath);
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -13,7 +17,6 @@ export async function GET(request: Request) {
     const info = await ytdl(url, {
       dumpSingleJson: true,
       noWarnings: true,
-      noCallHome: true,
       preferFreeFormats: true,
       youtubeSkipDashManifest: true,
       flatPlaylist: true,
@@ -23,7 +26,7 @@ export async function GET(request: Request) {
   } catch (error: any) {
     console.error('Error fetching video info:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch video information or playlist' },
+      { error: 'Failed to fetch video information or playlist', details: error?.message || String(error), stack: error?.stack },
       { status: 500 }
     );
   }
